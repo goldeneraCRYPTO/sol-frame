@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Society DAO Pool</title>
+  <link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@700&display=swap" rel="stylesheet">
+  <style>
+
+/* Clean outer outline for title without intruding on fill */
+.title{
+  position: relative;
+  display: inline-block;
+  font-weight: 800;
+}
+.title .stroke{ display:none; } /* disable stroke layer */
+.title, .title .fill{
+  color:#1fce3e;
+  -webkit-text-fill-color:#1fce3e;
+  /* no stroke; emulate outline with 1px text-shadow around */
+  text-shadow:
+    -1px  0   0 #000,
+     1px  0   0 #000,
+     0    -1px 0 #000,
+     0     1px 0 #000,
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000;
+}
+
+
+
+
+
+
+    :root{ --fg:#000; --green:#1dc93a; --radius:28px; --mono: ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:#fff;color:var(--fg);}
+    .wrap{max-width:800px;margin:40px auto;padding:0 16px;font-family:'Unbounded',sans-serif}
+    h1{}
+    .card{border: 1px solid var(--fg);border-radius:var(--radius);padding:22px;}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:center;}
+    .field{border: 1px solid var(--fg);border-radius:999px;padding:10px 16px;font-size:20px;text-align:center;width:100%;}
+    .label{font-size:18px;margin-bottom:6px;}
+    .btn{display:inline-block;background:var(--green);color:#fff;border: 1px solid var(--fg);border-radius:999px;padding:14px 24px;font-size:20px;font-weight:700;cursor:pointer;text-transform:uppercase;letter-spacing:.4px;}
+    .btn:disabled{opacity:.5;cursor:not-allowed}
+    .idline{font-family:var(--mono);font-size:13px;overflow:auto;white-space:nowrap;border: 1px solid var(--fg);border-radius:16px;padding:6px 10px;}
+    .grid2{display:grid;grid-template-columns:auto 1fr;gap:12px;align-items:center}
+    .icon{width:44px;height:44px;border: 1px solid var(--fg);border-radius:50%;display:grid;place-items:center;background:#fff;overflow:hidden}
+    .muted{opacity:.8;font-size:13px;margin-top:6px}
+    .center{text-align:center}
+    .roi-wrap{display:flex;justify-content:center;margin-top:16px}
+    .roi-chip{border: 1px solid #1dc93a;border-radius:999px;padding:10px 18px;font-size:16px;font-weight:700;color:#000;display:inline-block;background:#fff;text-align:center}
+    .roi-note{font-size:13px;margin-top:8px;text-align:center}
+    @media (max-width:720px){h1{}.row{grid-template-columns:1fr}}
+  </style>
+
+<style>
+  /* Stack label and value vertically inside post section */
+  #section-post .grid2 {
+    grid-template-columns: 1fr !important;
+    justify-items: center;
+    text-align: center;
+  }
+  #section-post .grid2 .label { display:block; }
+  #section-post #countdown, #section-post #earned {
+    display:block;
+    margin-top: 4px;
+    font-size: 18px !important;
+    font-weight: 800;
+  }
+</style>
+
+<style>
+.stroke {
+  -webkit-text-stroke: 2px #000;
+  color: transparent;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+.fill {
+  color: #1fce3e;
+  
+  position: relative;
+}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 class="title" style="text-align:center;width:100%"><span class="stroke">Deposit tokens to Society DAO Pool</span><span class="fill">Deposit tokens to Society DAO Pool</span></h1>
+    <div class="card">
+<div id="section-form">
+
+      <div class="row">
+        <div class="grid2">
+          <div class="icon"><img src="logo.png" alt="token" style="width:100%;height:100%;object-fit:cover"></div>
+          <div>
+            <div class="label">Token</div>
+            <div style="font-size:18px">$SOCIETY</div>
+          </div>
+        </div>
+        <div class="grid2">
+          <div class="icon"><img src="address.png" alt="token address" style="width:100%;height:100%;object-fit:cover"></div>
+          <div style="min-width:0">
+            <div class="label">Token address</div>
+            <div class="idline" id="mintView">2m8dHcwu...VBAGS</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="height:18px"></div>
+      <div class="center">
+        <div class="label">Amount</div>
+        <input id="amount" class="field" value="1" placeholder="10000000" inputmode="numeric" pattern="[0-9]*">
+        <div class="muted" id="minNote">Minimum: 1</div>
+      </div>
+
+      <div style="height:20px"></div>
+      <div class="center">
+        <button id="sendBtn" class="btn" disabled>Deposit</button>
+      </div>
+
+      
+</div>
+
+<div id="section-post" style="display:none">
+  <div style="text-align:center; padding-top:8px;">
+    
+<div style="position:relative; display:inline-block;">
+  <span class="stroke" style="font-family:'Unbounded',sans-serif; font-weight:800; font-size:25px; line-height:1.1;">WELCOME TO</span>
+  <span class="fill" style="font-family:'Unbounded',sans-serif; font-weight:800; font-size:25px; line-height:1.1;">WELCOME TO</span>
+</div>
+<div style="height:2px"></div>
+<div style="position:relative; display:inline-block;">
+  <span class="stroke" style="font-family:'Unbounded',sans-serif; font-weight:800; font-size:25px; line-height:1.1;">THE SOCIETY DAO</span>
+  <span class="fill" style="font-family:'Unbounded',sans-serif; font-weight:800; font-size:25px; line-height:1.1;">THE SOCIETY DAO
+</div>
+
+    <div style="height:6px"></div>
+    <a id="tg-join" href="https://t.me/your_daolink" target="_blank" style="font-weight:800; text-decoration:none; color:#000;">JOIN 🔗</a>
+  </div>
+
+  <div class="row" style="display:flex; justify-content:space-between; margin-top:12px;">
+    <div class="grid2" style="text-align:center; flex:1;">
+      <div class="label" style="text-decoration:underline; font-size:18px; display:block;">TIMER</div>
+      <div id="countdown" style="font-weight:800; font-size:18px; margin-top:4px; display:block;">7D 00:00:00</div>
+    </div>
+    <div class="grid2" style="text-align:center; flex:1;">
+      <div class="label" style="text-decoration:underline; font-size:18px; display:block;">$SOCIETY EARNED</div>
+      <div id="earned" style="font-weight:800; font-size:18px; margin-top:4px; display:block;">0.00 $SOCIETY</div>
+    </div>
+  </div>
+
+  <div class="center" style="margin-top:14px;">
+    <button id="depositMoreBtn" class="btn">DEPOSIT MORE</button>
+  </div>
+</div>
+
+<!-- ROI info -->
+      <div class="roi-wrap"><div class="roi-chip">APY · 1200% / Duration · 7 days</div></div>
+      <div class="roi-note" id="roiNote"></div>
+
+      <div id="status" class="center" style="margin-top:14px;font-size:14px;"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/@solana/web3.js@1.95.3/lib/index.iife.min.js"></script>
+  <script>
+  (function(){
+    const RECEIVER = new solanaWeb3.PublicKey('AYMMuzSyu2vrkdiU5jmCe8DGFXBuqRZbwRnUbTifoCAW');
+    const MINT     = new solanaWeb3.PublicKey('2m8dHcwumaXHz2aH1ZaxNsDEVbogyWP3vZrbqsLVBAGS');
+
+    const DAILY_RATE = 0.0333;    // 3.33% per day
+    const DURATION_DAYS = 7;
+    const MIN_HUMAN = 1;  // set 1 for tests
+
+    const RPC = window.location.origin + '/rpc';
+    const connection = new solanaWeb3.Connection(RPC, 'finalized');
+
+    const TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA');
+    const ASSOCIATED_TOKEN_PROGRAM_ID = new solanaWeb3.PublicKey('ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL');
+
+    const amountEl = document.getElementById('amount');
+    const sendBtn  = document.getElementById('sendBtn');
+    const statusEl = document.getElementById('status');
+    const roiNote  = document.getElementById('roiNote');
+    document.getElementById('mintView').textContent = MINT.toBase58();
+
+    function setStatus(msg, color){ statusEl.style.color=color||'#000'; statusEl.innerHTML=msg||''; }
+    function assertPhantom(){ if (!window.solana||!window.solana.isPhantom) throw new Error('Phantom wallet not found.'); return window.solana; }
+
+    function getATA(mint, owner){
+      const [pda] = solanaWeb3.PublicKey.findProgramAddressSync(
+        [owner.toBuffer(), TOKEN_PROGRAM_ID.toBuffer(), mint.toBuffer()],
+        ASSOCIATED_TOKEN_PROGRAM_ID
+      );
+      return pda;
+    }
+    function ixCreateATA(payer, ata, owner, mint){
+      return new solanaWeb3.TransactionInstruction({
+        programId: ASSOCIATED_TOKEN_PROGRAM_ID,
+        keys:[
+          {pubkey:payer,isSigner:true,isWritable:true},
+          {pubkey:ata,isSigner:false,isWritable:true},
+          {pubkey:owner,isSigner:false,isWritable:false},
+          {pubkey:mint,isSigner:false,isWritable:false},
+          {pubkey:solanaWeb3.SystemProgram.programId,isSigner:false,isWritable:false},
+          {pubkey:TOKEN_PROGRAM_ID,isSigner:false,isWritable:false},
+          {pubkey:solanaWeb3.SYSVAR_RENT_PUBKEY,isSigner:false,isWritable:false}
+        ]
+      });
+    }
+    function u64LE(nBig){ const b=new Uint8Array(8); let x=nBig; for(let i=0;i<8;i++){ b[i]=Number(x&0xffn); x>>=8n; } return b; }
+    function ixTransfer(fromAta,toAta,owner,amountBig){
+      const data=new Uint8Array(9); data[0]=3; data.set(u64LE(amountBig),1);
+      return new solanaWeb3.TransactionInstruction({
+        programId:TOKEN_PROGRAM_ID,
+        keys:[
+          {pubkey:fromAta,isSigner:false,isWritable:true},
+          {pubkey:toAta,isSigner:false,isWritable:true},
+          {pubkey:owner,isSigner:true,isWritable:false}
+        ],
+        data
+      });
+    }
+
+    // === validation + ROI calculation ===
+    function parseHuman(){
+      const raw = (amountEl.value || '').replace(/[^\d]/g, '');
+      return raw ? Number(raw) : NaN;
+    }
+    function formatNum(n){ try{return n.toLocaleString('en-US')}catch{return String(n)} }
+    function validate(){
+      const v = parseHuman();
+      const ok = Number.isFinite(v) && v >= MIN_HUMAN;
+      sendBtn.disabled = !ok;
+      document.getElementById('minNote').textContent = 'Minimum: ' + MIN_HUMAN.toLocaleString('en-US');
+      setStatus(ok ? '' : 'Enter at least ' + MIN_HUMAN.toLocaleString('en-US'));
+
+      // ROI estimation
+      if (Number.isFinite(v) && v>0){
+        const factor = 1 + DAILY_RATE*DURATION_DAYS; // simple interest
+        const out = v * factor;
+        const pct = (factor - 1) * 100;
+        roiNote.textContent = `Estimated after ${DURATION_DAYS} days: ${formatNum(out)} (+${pct.toFixed(1)}%)`;
+      } else {
+        roiNote.textContent = '';
+      }
+    }
+    ['input','change','paste','keyup'].forEach(ev => amountEl.addEventListener(ev, validate));
+    validate();
+
+    // === send ===
+    sendBtn.onclick = async () => {
+      try{
+        const provider = assertPhantom();
+        setStatus('Connecting Phantom…');
+        const { publicKey } = await provider.connect();
+        const payer = publicKey;
+
+        setStatus('Fetching token params…');
+        const acct = await connection.getParsedAccountInfo(MINT);
+        const decimals = acct?.value?.data?.parsed?.info?.decimals;
+        if (typeof decimals !== 'number') throw new Error('Failed to read token decimals');
+
+        const human = parseHuman();
+        if (!Number.isFinite(human) || human < MIN_HUMAN) throw new Error('Amount is below minimum');
+        const qty = BigInt(Math.round(human * (10 ** decimals)));
+
+        const fromAta = getATA(MINT, payer);
+        const toAta   = getATA(MINT, RECEIVER);
+
+        const [toInfo, fromInfo] = await Promise.all([
+          connection.getAccountInfo(toAta),
+          connection.getAccountInfo(fromAta),
+        ]);
+        if (!fromInfo) throw new Error('Sender has no token account for this mint.');
+
+        const { blockhash, lastValidBlockHeight } = await connection.getLatestBlockhash('finalized');
+        const tx = new solanaWeb3.Transaction({ feePayer: payer, blockhash, lastValidBlockHeight });
+
+        if (!toInfo) tx.add(ixCreateATA(payer, toAta, RECEIVER, MINT));
+        tx.add(ixTransfer(fromAta, toAta, payer, qty));
+
+        setStatus('Signing and sending…');
+        const { signature } = await provider.signAndSendTransaction(tx);
+        setStatus('Sent! <a target="_blank" href="https://explorer.solana.com/tx/'+signature+'?cluster=mainnet-beta">Open in Explorer</a>','#1dc93a');
+        window.__showPostDepositFromTx(signature, qty, decimals, MINT);
+
+      }catch(e){
+        console.error(e);
+        setStatus('Error: ' + (e?.message || e), 'crimson');
+      }
+    };
+  })();
+  </script>
+
+<script>
+const WEEKLY_RATE = 0.0333;
+const DURATION_MS = 7 * 24 * 60 * 60 * 1000;
+let earningsTimer = null;
+function formatCountdown(msLeft){ if(msLeft<0)msLeft=0; const s=Math.floor(msLeft/1000);
+  const d=Math.floor(s/86400); const h=String(Math.floor((s%86400)/3600)).padStart(2,'0');
+  const m=String(Math.floor((s%3600)/60)).padStart(2,'0'); const sc=String(s%60).padStart(2,'0');
+  return `${d}D ${h}:${m}:${sc}`; }
+function startCounters(st){
+  if(earningsTimer) clearInterval(earningsTimer);
+  const amountHuman = Number(st.amountRaw||0) / Math.pow(10, Number(st.decimals||0));
+  const start = st.ts, end = start + DURATION_MS;
+  function tick(){
+    const now=Date.now(); const elapsed=Math.min(Math.max(now-start,0), DURATION_MS);
+    const left=end-now; const progress=elapsed/DURATION_MS;
+    const earned=amountHuman*WEEKLY_RATE*progress;
+    const c=document.getElementById('countdown'); const e=document.getElementById('earned');
+    if(c) c.textContent = formatCountdown(left);
+    if(e) e.textContent = `${earned.toFixed(2)} $SOCIETY`;
+  }
+  tick(); earningsTimer = setInterval(tick, 1000);
+}
+function swapToPost(st){
+  try{ localStorage.setItem('societyDeposit', JSON.stringify(st)); }catch(e){}
+  const form=document.getElementById('section-form'); const post=document.getElementById('section-post');
+  if(form) form.style.display='none'; if(post) post.style.display='block'; startCounters(st);
+}
+window.__showPostDepositFromTx = function(signature, amountRaw, decimals, mint){
+  const st = { ts: Date.now(), amountRaw: (typeof amountRaw==='bigint'? Number(amountRaw): Number(amountRaw)),
+               decimals: Number(decimals), tx: signature, mint };
+  swapToPost(st);
+};
+document.addEventListener('DOMContentLoaded', ()=>{
+  const more = document.getElementById('depositMoreBtn');
+  if(more) more.addEventListener('click', ()=>{
+    const form=document.getElementById('section-form'); const post=document.getElementById('section-post');
+    if(post) post.style.display='none'; if(form) form.style.display='block';
+  });
+  try{ const raw=localStorage.getItem('societyDeposit'); if(raw){ const st=JSON.parse(raw);
+    if(Date.now()-st.ts < DURATION_MS) swapToPost(st); else localStorage.removeItem('societyDeposit'); } }catch(e){}
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "oneclick-pool",
+  "version": "1.0.0",
+  "private": true,
+  "description": "One-click SPL token deposit page with Phantom \u2014 tiny static server.",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "open": "^10.1.0",
+    "node-fetch": "^3.3.2"
+  }
+}

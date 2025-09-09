@@ -1,0 +1,12 @@
+[build]
+  publish   = "public"
+  functions = "netlify/functions"
+
+[functions]
+  node_bundler = "esbuild"
+
+[[redirects]]
+  from = "/rpc"
+  to   = "/.netlify/functions/rpc"
+  status = 200
+  force  = true
